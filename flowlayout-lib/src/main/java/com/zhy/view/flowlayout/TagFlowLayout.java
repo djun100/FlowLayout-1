@@ -24,7 +24,7 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
     private TagAdapter mTagAdapter;
     private boolean mAutoSelectEffect = true;
     private int mSelectedMax = -1;//-1为不限制数量
-    private static final String TAG = "com.zhy.view.flowlayout.TagFlowLayout";
+    private static final String TAG = "TagFlowLayout";
     private MotionEvent mMotionEvent;
     private OnTagClickListener mOnTagClickListener;
     private OnTagLongClickListener mOnTagLongClickListener;
