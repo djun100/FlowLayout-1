@@ -2,13 +2,14 @@ package com.zhy.view.flowlayout;
 
 import android.view.View;
 
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
+/**
+ * Created by wangxuechao on 17/9/10.
+ */
 public abstract class TagAdapter<T>
 {
     private List<T> mTagDatas;

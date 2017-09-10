@@ -16,15 +16,17 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * Created by zhy on 15/9/10.
+ * Created by wangxuechao on 17/9/10.
  */
 public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChangedListener
 {
     private TagAdapter mTagAdapter;
     private boolean mAutoSelectEffect = true;
     private int mSelectedMax = -1;//-1为不限制数量
-    private static final String TAG = "TagFlowLayout";
+    private static final String TAG = "com.zhy.view.flowlayout.TagFlowLayout";
     private MotionEvent mMotionEvent;
+    private OnTagClickListener mOnTagClickListener;
+    private OnTagLongClickListener mOnTagLongClickListener;
 
     private Set<Integer> mSelectedView = new HashSet<Integer>();
 
@@ -62,10 +64,10 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
         for (int i = 0; i < cCount; i++)
         {
             TagView tagView = (TagView) getChildAt(i);
-            if (tagView.getVisibility() == View.GONE) continue;
-            if (tagView.getTagView().getVisibility() == View.GONE)
+            if (tagView.getVisibility() == GONE) continue;
+            if (tagView.getTagView().getVisibility() == GONE)
             {
-                tagView.setVisibility(View.GONE);
+                tagView.setVisibility(GONE);
             }
         }
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -84,17 +86,31 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
         if (mOnSelectListener != null) setClickable(true);
     }
 
-    public interface OnTagClickListener
+    public abstract static class OnTagClickListener
     {
-        boolean onTagClick(View view, int position, FlowLayout parent);
+        public abstract boolean onTagClick(View view, int position, FlowLayout parent);
+
+        public boolean doSelect(int position){
+            return true;
+        };
     }
 
-    private OnTagClickListener mOnTagClickListener;
+    public interface OnTagLongClickListener
+    {
+        boolean onTagLongClick(View view, int position, FlowLayout parent);
+    }
+
 
     public void setOnTagClickListener(OnTagClickListener onTagClickListener)
     {
         mOnTagClickListener = onTagClickListener;
         if (onTagClickListener != null) setClickable(true);
+    }
+
+    public void setOnTagLongClickListener(OnTagLongClickListener onTagLongClickListener)
+    {
+        mOnTagLongClickListener = onTagLongClickListener;
+        if (onTagLongClickListener != null) setLongClickable(true);
     }
 
 
@@ -162,10 +178,10 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
-        if (event.getAction() == MotionEvent.ACTION_UP)
-        {
+//        if (event.getAction() == MotionEvent.ACTION_UP)
+//        {
             mMotionEvent = MotionEvent.obtain(event);
-        }
+//        }
         return super.onTouchEvent(event);
     }
 
@@ -182,10 +198,35 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
         int pos = findPosByView(child);
         if (child != null)
         {
-            doSelect(child, pos);
-            if (mOnTagClickListener != null)
-            {
+            if (mOnTagClickListener != null) {
+                if (mOnTagClickListener.doSelect(pos)){
+                    doSelect(child, pos);
+                }
                 return mOnTagClickListener.onTagClick(child.getTagView(), pos, this);
+            }else {
+                doSelect(child, pos);
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean performLongClick()
+    {
+        if (mMotionEvent == null) return super.performLongClick();
+
+        int x = (int) mMotionEvent.getX();
+        int y = (int) mMotionEvent.getY();
+        mMotionEvent = null;
+
+        TagView child = findChild(x, y);
+        int pos = findPosByView(child);
+        if (child != null)
+        {
+//            doSelect(child, pos);
+            if (mOnTagLongClickListener != null)
+            {
+                return mOnTagLongClickListener.onTagLongClick(child.getTagView(), pos, this);
             }
         }
         return true;
@@ -315,7 +356,7 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
         for (int i = 0; i < cCount; i++)
         {
             TagView v = (TagView) getChildAt(i);
-            if (v.getVisibility() == View.GONE) continue;
+            if (v.getVisibility() == GONE) continue;
             Rect outRect = new Rect();
             v.getHitRect(outRect);
             if (outRect.contains(x, y))

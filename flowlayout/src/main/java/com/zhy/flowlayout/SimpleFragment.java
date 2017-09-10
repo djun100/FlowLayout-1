@@ -18,7 +18,7 @@ import com.zhy.view.flowlayout.TagFlowLayout;
 public class SimpleFragment extends Fragment
 {
     private String[] mVals = new String[]
-            {"Hello", "Android", "Weclome Hi ", "Button", "TextView", "Hello",
+            {"Helloddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "Android", "Weclome Hi ", "Button", "TextView", "Hello",
                     "Android", "Weclome", "Button ImageView", "TextView", "Helloworld",
                     "Android", "Weclome Hello", "Button Text", "TextView"};
 

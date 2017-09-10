@@ -46,8 +46,7 @@ public class EventTestFragment extends Fragment
             @Override
             public View getView(FlowLayout parent, int position, String s)
             {
-                TextView tv = (TextView) mInflater.inflate(R.layout.tv,
-                        mFlowLayout, false);
+                TextView tv = (TextView) mInflater.inflate(R.layout.tv, mFlowLayout, false);
                 tv.setText(s);
                 return tv;
             }
@@ -65,6 +64,26 @@ public class EventTestFragment extends Fragment
             public boolean onTagClick(View view, int position, FlowLayout parent)
             {
                 Toast.makeText(getActivity(), mVals[position], Toast.LENGTH_SHORT).show();
+                //view.setVisibility(View.GONE);
+                return true;
+            }
+
+            @Override
+            public boolean doSelect(int position) {
+                boolean canSelect=position%2==0;
+                if (canSelect) {
+                    Toast.makeText(getActivity(),"can select",Toast.LENGTH_SHORT).show();
+                }
+                return canSelect;
+            }
+        });
+
+        mFlowLayout.setOnTagLongClickListener(new TagFlowLayout.OnTagLongClickListener()
+        {
+            @Override
+            public boolean onTagLongClick(View view, int position, FlowLayout parent)
+            {
+                Toast.makeText(getActivity(), "Long click:"+mVals[position], Toast.LENGTH_SHORT).show();
                 //view.setVisibility(View.GONE);
                 return true;
             }
