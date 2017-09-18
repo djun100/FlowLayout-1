@@ -204,8 +204,8 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
             if (mOnTagClickListener != null) {
                 if (mOnTagClickListener.doSelect(pos)){
                     doSelect(child, pos);
+                    return mOnTagClickListener.onTagClick(child.getTagView(), pos, this);
                 }
-                return mOnTagClickListener.onTagClick(child.getTagView(), pos, this);
             }else {
                 doSelect(child, pos);
             }
